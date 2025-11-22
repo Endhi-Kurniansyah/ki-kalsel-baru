@@ -28,6 +28,9 @@
                     <x-nav-link :href="route('admin.commissioners.index')" :active="request()->routeIs('admin.commissioners.*')">
                         {{ __('Kelola Komisioner') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                        {{ __('Kelola Berita') }}
+                    </x-nav-link>
                 </div>
             </div>
 

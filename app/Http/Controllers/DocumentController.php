@@ -11,12 +11,24 @@ class DocumentController extends Controller
     /**
      * Menampilkan daftar semua dokumen.
      */
-    public function index()
+    public function index(Request $request) // <-- Tambahkan Request $request
     {
-        // Ambil semua dokumen, diurutkan dari yang terbaru
-        $documents = Document::orderBy('created_at', 'desc')->get();
+        // 1. Mulai query (jangan langsung ->get())
+        $query = Document::orderBy('created_at', 'desc');
 
-        // Tampilkan view 'admin.documents.index' dan kirim data '$documents'
+        // 2. Cek apakah ada pencarian?
+        if ($request->has('search') && $request->search != null) {
+            $keyword = $request->search;
+            // Filter berdasarkan Judul ATAU Kategori
+            $query->where(function($q) use ($keyword) {
+                $q->where('title', 'LIKE', "%$keyword%")
+                  ->orWhere('category', 'LIKE', "%$keyword%");
+            });
+        }
+
+        // 3. Eksekusi query
+        $documents = $query->get();
+
         return view('admin.documents.index', compact('documents'));
     }
 

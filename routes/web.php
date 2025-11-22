@@ -16,6 +16,8 @@ use App\Http\Controllers\HalamanController;
 
 // Rute untuk Halaman Beranda
 Route::get('/', [HalamanController::class, 'beranda'])->name('beranda');
+Route::get('/pencarian', [HalamanController::class, 'pencarian'])->name('pencarian');
+Route::get('/berita/{slug}', [HalamanController::class, 'detailBerita'])->name('berita.detail');
 
 // === GRUP RUTE UNTUK MENU PROFIL ===
 Route::prefix('profil')->name('profil.')->group(function () {
@@ -75,6 +77,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('documents', \App\Http\Controllers\DocumentController::class);
     Route::resource('agendas', \App\Http\Controllers\AgendaController::class);
     Route::resource('commissioners', \App\Http\Controllers\CommissionerController::class);
+    Route::resource('news', \App\Http\Controllers\NewsController::class);
 
 });
 

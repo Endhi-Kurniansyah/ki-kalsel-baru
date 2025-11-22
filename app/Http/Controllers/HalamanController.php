@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Page;         // Untuk halaman statis (Visi Misi, Tentang)
 use App\Models\Document;     // Untuk semua file (Laporan, Regulasi, Putusan)
 use App\Models\Agenda;       // Untuk Agenda & Jadwal Sidang
-use App\Models\Commissioner; // Untuk Profil Komisioner
+use App\Models\Commissioner;
+use App\Models\News; // Untuk Profil Komisioner
 
 class HalamanController extends Controller
 {
@@ -45,19 +46,31 @@ class HalamanController extends Controller
     /**
      * Menampilkan Halaman Beranda
      */
+
     public function beranda()
     {
-        // 1. Ambil 3 agenda terbaru (berdasarkan waktu mulai)
+        // 1. Data Agenda & Dokumen (Yang sudah ada)
         $latestAgendas = Agenda::orderBy('start_time', 'desc')->take(3)->get();
-
-        // 2. Ambil 3 dokumen terbaru (berdasarkan waktu upload)
         $latestDocuments = Document::orderBy('created_at', 'desc')->take(3)->get();
 
-        // 3. Tampilkan view 'frontend.beranda' dan kirimkan datanya
+        // 2. DATA BERITA (BARU)
+        // Ambil 6 berita terbaru (campur)
+        $allNews = News::latest()->take(6)->get();
+
+        // Ambil 6 berita kategori 'kegiatan'
+        $kegiatanNews = News::where('category', 'kegiatan')->latest()->take(6)->get();
+
+        // Ambil 6 berita kategori 'sidang'
+        $sidangNews = News::where('category', 'sidang')->latest()->take(6)->get();
+
+        // 3. Kirim semua ke view
         return view('frontend.beranda', [
             'latestAgendas' => $latestAgendas,
             'latestDocuments' => $latestDocuments,
-            'page_title' => 'Beranda' // (Opsional) Untuk judul tab browser
+            'allNews' => $allNews,
+            'kegiatanNews' => $kegiatanNews,
+            'sidangNews' => $sidangNews,
+            'page_title' => 'Beranda'
         ]);
     }
 
@@ -256,5 +269,58 @@ class HalamanController extends Controller
     public function formPermohonanPsi()
     {
         return $this->showDocumentList('form-permohonan-psi', 'Form Permohonan PSI');
+    }
+
+    /**
+     * Fitur Pencarian Global
+     */
+    public function pencarian(Request $request)
+    {
+        // 1. Ambil kata kunci
+        $keyword = $request->input('q');
+
+        // Jika kosong, kembalikan saja ke beranda atau tampilkan kosong
+        if (!$keyword) {
+            return redirect()->route('beranda');
+        }
+
+        // 2. Cari di Berita (Judul atau Isi)
+        $newsResults = \App\Models\News::where('title', 'LIKE', "%{$keyword}%")
+                            ->orWhere('content', 'LIKE', "%{$keyword}%")
+                            ->latest()
+                            ->get();
+
+        // 3. Cari di Dokumen (Judul)
+        $docResults = \App\Models\Document::where('title', 'LIKE', "%{$keyword}%")
+                            ->latest()
+                            ->get();
+
+        // 4. Cari di Halaman Statis (Judul atau Isi)
+        $pageResults = \App\Models\Page::where('title', 'LIKE', "%{$keyword}%")
+                            ->orWhere('content', 'LIKE', "%{$keyword}%")
+                            ->get();
+
+        // 5. Tampilkan View Hasil
+        return view('frontend.search_results', [
+            'keyword' => $keyword,
+            'newsResults' => $newsResults,
+            'docResults' => $docResults,
+            'pageResults' => $pageResults,
+            'page_title' => 'Hasil Pencarian: ' . $keyword
+        ]);
+    }
+
+    /**
+     * Menampilkan detail satu berita.
+     */
+    public function detailBerita($slug)
+    {
+        // Cari berita berdasarkan slug, kalau tidak ada tampilkan 404
+        $news = \App\Models\News::where('slug', $slug)->firstOrFail();
+
+        return view('frontend.news_detail', [
+            'news' => $news,
+            'page_title' => $news->title
+        ]);
     }
 }

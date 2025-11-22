@@ -23,6 +23,31 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <div class="p-6 text-gray-900">
+
+                    {{-- === FORM PENCARIAN DOKUMEN === --}}
+                    <div class="mb-4">
+                        <form action="{{ route('admin.documents.index') }}" method="GET">
+                            <div class="flex items-center">
+                                <input type="text" name="search"
+                                       value="{{ request('search') }}"
+                                       placeholder="Cari judul dokumen atau kategori..."
+                                       class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-64 mr-2">
+
+                                <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition">
+                                    Cari
+                                </button>
+
+                                {{-- Tombol Reset (muncul jika sedang mencari) --}}
+                                @if(request('search'))
+                                    <a href="{{ route('admin.documents.index') }}" class="ml-2 text-gray-600 hover:text-gray-900 underline">
+                                        Reset
+                                    </a>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                    {{-- ============================== --}}
 
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
