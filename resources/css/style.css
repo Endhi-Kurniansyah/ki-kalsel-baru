@@ -1,0 +1,67 @@
+/* Container Merah Penuh */
+.quick-links-section {
+    background-color: #d8202b; 
+    padding: 30px 0;
+    color: white;
+}
+
+/* Style untuk setiap kolom link */
+.quick-link-item {
+    /* 1. Tambahkan transisi agar perubahan halus */
+    transition: background-color 0.3s ease-in-out, border-right 0.3s ease-in-out; 
+    
+    padding: 10px;
+    /* 2. Garis pemisah yang ada */
+    border-right: 1px solid rgba(255, 255, 255, 0.3); 
+    text-align: center; 
+}
+
+/* Hapus garis pemisah pada item terakhir */
+.quick-link-item:last-child {
+    border-right: none;
+}
+
+/* Style link (untuk teks dan ikon) */
+.quick-link-item a.link-content {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 15px 0;
+    text-align: center;
+    /* Tambahkan transisi untuk warna teks/ikon */
+    transition: color 0.3s ease-in-out;
+}
+
+/* Efek Hover pada Seluruh Item */
+.quick-link-item:hover {
+    /* 1. Mengubah background menjadi warna yang berbeda (misal: merah lebih tua) */
+    background-color: #c41e28; /* Merah sedikit lebih tua/gelap */
+    
+    /* 2. Mengubah garis pemisah agar terlihat menonjol (misal: warna putih murni) */
+    border-right-color: white !important; 
+    
+    /* 3. Menambahkan bayangan (opsional, untuk efek 'terangkat') */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+    
+    /* Penting: Pastikan z-index item yang di-hover lebih tinggi agar box-shadow terlihat */
+    position: relative; 
+    z-index: 2; 
+}
+
+/* Mengatur Item Terakhir saat Hover (karena tidak punya border-right) */
+.quick-link-item:last-child:hover {
+    /* Hanya untuk memastikan garis kiri item terakhir yang di-hover terlihat (opsional) */
+    border-left: 1px solid white !important; 
+}
+
+
+/* Efek Hover pada Teks dan Ikon di dalamnya */
+.quick-link-item:hover a.link-content {
+    /* Mengubah warna teks dan ikon menjadi lebih terang atau kuning/emas */
+    color: #ffcc00; /* Warna Kuning/Emas */
+}
+
+/* Mengubah warna 'Kunjungi' secara spesifik saat di-hover (opsional) */
+.quick-link-item:hover .btn-kunungi {
+    text-decoration: underline;
+}
