@@ -40,7 +40,7 @@
 
     {{-- 2. Link Cepat --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-        <a href="#" class="block bg-red-600 text-white p-6 rounded-lg shadow-md hover:bg-blue-700 transition">
+        <a href="https://ppidutama.kalselprov.go.id/" class="block bg-red-600 text-white p-6 rounded-lg shadow-md hover:bg-blue-700 transition">
             <h3 class="text-2xl font-bold mb-2">E-PPID</h3>
             <p>Kunjungi &rarr;</p>
         </a>

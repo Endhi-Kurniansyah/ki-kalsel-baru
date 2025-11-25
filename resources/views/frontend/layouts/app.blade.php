@@ -17,18 +17,18 @@
             <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     {{-- Logo --}}
-                    <div class="flex-shrink-0">
+                    <div class="flex-shrink-0 **mr-6 lg:mr-10**">
                         <a href="{{ route('beranda') }}" class="flex items-center space-x-2">
                             {{-- Ganti dengan logo Anda --}}
                             <img class="h-10 w-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Lambang_Provinsi_Kalimantan_Selatan.svg/1200px-Lambang_Provinsi_Kalimantan_Selatan.svg.png" alt="Logo KI Kalsel">
                             <span class="font-bold text-white hidden md:block">
-                                Komisi Informasi<br>Prov. Kalsel
+                                KOMISI INFORMASI<br>Provinsi. Kalsel
                             </span>
                         </a>
                     </div>
 
                     {{-- Menu Desktop --}}
-                    <div class="hidden md:flex md:space-x-4">
+                    <div class="hidden md:flex **md:space-x-6 lg:space-x-8**">
                         <a href="{{ route('beranda') }}" class="px-3 py-2 text-sm font-medium text-white hover:text-black">BERANDA</a>
 
                         {{-- Dropdown Profil (PERBAIKAN DI SINI) --}}
