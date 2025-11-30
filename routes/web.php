@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HalamanController;
+use App\Http\Controllers\ImageUploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,7 +79,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('agendas', \App\Http\Controllers\AgendaController::class);
     Route::resource('commissioners', \App\Http\Controllers\CommissionerController::class);
     Route::resource('news', \App\Http\Controllers\NewsController::class);
-
+     Route::post('/upload-image', [ImageUploadController::class, 'store'])->name('upload.image');
 });
 
 // ================================================

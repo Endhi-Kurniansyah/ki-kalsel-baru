@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time')->nullable();
             $table->string('category');
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

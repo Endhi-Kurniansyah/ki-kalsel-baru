@@ -29,6 +29,7 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul Agenda</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lampiran</th> {{-- KOLOM BARU --}}
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Mulai</th>
                                 <th class="relative px-6 py-3"><span class="sr-only">Aksi</span></th>
@@ -39,15 +40,25 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $agenda->title }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $agenda->category }}</td>
+
+                                    {{-- KOLOM BARU: LAMPIRAN --}}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($agenda->file_path)
+                                            <a href="{{ Storage::url($agenda->file_path) }}" target="_blank" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                                Lihat
+                                            </a>
+                                        @else
+                                            <span class="text-gray-400">-</span>
+                                        @endif
+                                    </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $agenda->location }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $agenda->start_time->format('d M Y, H:i') }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        {{-- Ganti href="#" --}}
                                         <a href="{{ route('admin.agendas.edit', $agenda) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                        {{-- ... --}}
-                                        {{-- Kita akan aktifkan Hapus nanti --}}
-                                        {{-- ... (tombol Edit masih ada) ... --}}
-                                        {{-- FORM UNTUK DELETE --}}
+
+                                        {{-- FORM DELETE --}}
                                         <form action="{{ route('admin.agendas.destroy', $agenda) }}" method="POST" class="inline-block ml-4">
                                             @csrf
                                             @method('DELETE')
@@ -61,7 +72,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                         Belum ada agenda.
                                     </td>
                                 </tr>

@@ -23,7 +23,8 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('admin.agendas.store') }}" method="POST">
+                    {{-- PERBAIKAN 1: Tambahkan enctype="multipart/form-data" --}}
+                    <form action="{{ route('admin.agendas.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Judul Agenda --}}
@@ -33,7 +34,7 @@
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                         </div>
 
-                        {{-- Kategori (PENTING) --}}
+                        {{-- Kategori --}}
                         <div class="mb-4">
                             <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
                             <select name="category" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
@@ -69,6 +70,13 @@
                             <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
                             <textarea name="description" id="description" rows="4"
                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('description') }}</textarea>
+                        </div>
+
+                        {{-- PERBAIKAN 2: Input File Tambahan --}}
+                        <div class="mb-4">
+                            <label for="file" class="block text-sm font-medium text-gray-700">Lampiran (Undangan/PDF/Gambar) - Opsional</label>
+                            <input type="file" name="file" id="file" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <p class="text-xs text-gray-500 mt-1">Format: PDF, JPG, PNG. Maks: 5MB.</p>
                         </div>
 
                         {{-- Tombol Simpan --}}

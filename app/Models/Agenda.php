@@ -19,6 +19,7 @@ class Agenda extends Model
         'start_time',
         'end_time',
         'category',
+        'file_path',
     ];
 
     /**
