@@ -5,19 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Page extends Model
+class Gallery extends Model
 {
     use HasFactory;
 
-    /**
-     * Atribut yang boleh diisi secara massal.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'title',
-        'slug',
-        'content',
-        'hero_image',
+        'description',
+        'image_path'
     ];
 }

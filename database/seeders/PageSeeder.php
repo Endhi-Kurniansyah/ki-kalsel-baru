@@ -50,6 +50,14 @@ class PageSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'title' => 'Selamat Datang', // Judul Hero
+                'slug' => 'beranda',         // SLUG KHUSUS
+                'content' => 'Di Komisi Informasi Provinsi Kalimantan Selatan', // Subjudul Hero
+                'hero_image' => null, // Nanti diisi admin
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

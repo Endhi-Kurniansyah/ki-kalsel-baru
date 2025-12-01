@@ -71,20 +71,31 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        // 1. Validasi data
+        // 1. Validasi
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string', // Content jadi nullable jaga-jaga kalau cuma mau ganti foto
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // Validasi foto
         ]);
 
-        // 2. Update data di database
-        //    GANTI $request->title MENJADI $request->input('title')
-        $page->update([
+        $dataToUpdate = [
             'title' => $request->input('title'),
             'content' => $request->input('content'),
-        ]);
+        ];
 
-        // 3. Redirect kembali ke halaman index dengan pesan sukses
+        // 2. Cek apakah ada file hero_image baru di-upload
+        if ($request->hasFile('hero_image')) {
+            // Hapus file lama jika ada
+            if ($page->hero_image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($page->hero_image);
+            }
+            // Upload file baru ke folder 'hero_images'
+            $dataToUpdate['hero_image'] = $request->file('hero_image')->store('hero_images', 'public');
+        }
+
+        // 3. Update data
+        $page->update($dataToUpdate);
+
         return redirect()->route('admin.pages.index')->with('success', 'Halaman berhasil diperbarui.');
     }
 

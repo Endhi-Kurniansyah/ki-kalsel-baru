@@ -31,7 +31,7 @@
                         <div class="mb-4">
                             <label for="title" class="block text-sm font-medium text-gray-700">Judul Agenda</label>
                             <input type="text" name="title" id="title" value="{{ old('title') }}"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                         </div>
 
                         {{-- Kategori --}}
@@ -48,28 +48,28 @@
                         <div class="mb-4">
                             <label for="location" class="block text-sm font-medium text-gray-700">Lokasi</label>
                             <input type="text" name="location" id="location" value="{{ old('location') }}"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                         </div>
 
                         {{-- Waktu Mulai --}}
                         <div class="mb-4">
                             <label for="start_time" class="block text-sm font-medium text-gray-700">Waktu Mulai</label>
                             <input type="datetime-local" name="start_time" id="start_time" value="{{ old('start_time') }}"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                         </div>
 
                         {{-- Waktu Selesai (Opsional) --}}
                         <div class="mb-4">
                             <label for="end_time" class="block text-sm font-medium text-gray-700">Waktu Selesai (Opsional)</label>
                             <input type="datetime-local" name="end_time" id="end_time" value="{{ old('end_time') }}"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
 
                         {{-- Deskripsi (Opsional) --}}
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
                             <textarea name="description" id="description" rows="4"
-                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('description') }}</textarea>
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('description') }}</textarea>
                         </div>
 
                         {{-- PERBAIKAN 2: Input File Tambahan --}}

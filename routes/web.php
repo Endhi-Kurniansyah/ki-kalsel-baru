@@ -15,10 +15,17 @@ use App\Http\Controllers\ImageUploadController;
 // RUTE PUBLIK (FRONTEND)
 // ================================================
 
-// Rute untuk Halaman Beranda
+// Rute Halaman Utama
 Route::get('/', [HalamanController::class, 'beranda'])->name('beranda');
+
+// Rute Pencarian Global (Header)
 Route::get('/pencarian', [HalamanController::class, 'pencarian'])->name('pencarian');
+
+// Rute Detail Berita (Slug)
 Route::get('/berita/{slug}', [HalamanController::class, 'detailBerita'])->name('berita.detail');
+
+// 👇 PERBAIKAN: SATU RUTE UNTUK SEMUA BERITA (INDEX + FILTER + SEARCH) 👇
+Route::get('/berita', [HalamanController::class, 'beritaIndex'])->name('berita.index');
 
 // === GRUP RUTE UNTUK MENU PROFIL ===
 Route::prefix('profil')->name('profil.')->group(function () {
@@ -68,6 +75,9 @@ Route::prefix('informasi-publik')->name('informasi-publik.')->group(function () 
     Route::get('/form-permohonan-psi', [HalamanController::class, 'formPermohonanPsi'])->name('form-permohonan-psi');
 });
 
+// Rute Galeri
+Route::get('/galeri', [HalamanController::class, 'galeri'])->name('galeri.index');
+
 
 // ================================================
 // RUTE ADMIN (BACKEND)
@@ -75,16 +85,20 @@ Route::prefix('informasi-publik')->name('informasi-publik.')->group(function () 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('pages', \App\Http\Controllers\PageController::class);
+    // Rute Khusus Ganti Banner
+    Route::get('/pages/{page}/hero', [\App\Http\Controllers\PageController::class, 'editHero'])->name('pages.hero.edit');
+    Route::put('/pages/{page}/hero', [\App\Http\Controllers\PageController::class, 'updateHero'])->name('pages.hero.update');
+
     Route::resource('documents', \App\Http\Controllers\DocumentController::class);
     Route::resource('agendas', \App\Http\Controllers\AgendaController::class);
     Route::resource('commissioners', \App\Http\Controllers\CommissionerController::class);
     Route::resource('news', \App\Http\Controllers\NewsController::class);
-     Route::post('/upload-image', [ImageUploadController::class, 'store'])->name('upload.image');
+    Route::resource('galleries', \App\Http\Controllers\GalleryController::class);
+
+    Route::post('/upload-image', [ImageUploadController::class, 'store'])->name('upload.image');
 });
 
-// ================================================
-// RUTE BAWAAN BREEZE
-// ================================================
+// Rute Bawaan Breeze
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
