@@ -13,7 +13,6 @@ use App\Models\Gallery;
 class HalamanController extends Controller
 {
     // --- METHOD PENDUKUNG ---
-
     private function showPage(string $slug)
     {
         $page = Page::where('slug', $slug)->firstOrFail();
@@ -34,7 +33,6 @@ class HalamanController extends Controller
         $latestAgendas = Agenda::orderBy('start_time', 'desc')->take(3)->get();
         $latestDocuments = Document::orderBy('created_at', 'desc')->take(3)->get();
 
-        // Data Berita untuk Tab
         $allNews = News::latest()->take(6)->get();
         $kegiatanNews = News::where('category', 'LIKE', '%kegiatan%')->latest()->take(6)->get();
         $sidangNews = News::where('category', 'LIKE', '%sidang%')->latest()->take(6)->get();
@@ -50,36 +48,15 @@ class HalamanController extends Controller
         ]);
     }
 
-    /**
-     * Method Baru: Halaman Index Berita (Semua Berita + Filter)
-     */
     public function beritaIndex(Request $request)
     {
-        // Mulai query berita terbaru
         $query = News::latest();
-
-        // 1. Filter Kategori
-        if ($request->has('kategori') && $request->kategori != '') {
-            $query->where('category', 'LIKE', '%' . $request->kategori . '%');
-        }
-
-        // 2. Filter Tahun (berdasarkan created_at)
-        if ($request->has('tahun') && $request->tahun != '') {
-            $query->whereYear('created_at', $request->tahun);
-        }
-
-        // 3. Filter Pencarian Judul
-        if ($request->has('search') && $request->search != '') {
-             $query->where('title', 'LIKE', '%' . $request->search . '%');
-        }
-
-        // Ambil data dengan pagination (9 berita per halaman)
+        if ($request->has('kategori') && $request->kategori != '') $query->where('category', 'LIKE', '%' . $request->kategori . '%');
+        if ($request->has('tahun') && $request->tahun != '') $query->whereYear('created_at', $request->tahun);
+        if ($request->has('search') && $request->search != '') $query->where('title', 'LIKE', '%' . $request->search . '%');
         $allNews = $query->paginate(9);
 
-        return view('frontend.news_index', [
-            'allNews' => $allNews,
-            'page_title' => 'Berita & Kegiatan'
-        ]);
+        return view('frontend.news_index', ['allNews' => $allNews, 'page_title' => 'Berita & Kegiatan']);
     }
 
     public function detailBerita($slug)
@@ -113,38 +90,44 @@ class HalamanController extends Controller
     }
 
     // === PROFIL ===
+
     public function tentang() { return $this->showPage('tentang'); }
     public function visiMisi() { return $this->showPage('visi-misi'); }
     public function strukturSekretariat() { return $this->showPage('struktur-sekretariat'); }
     public function tugasFungsi() { return $this->showPage('tugas-fungsi'); }
     public function daftarPejabat() { return $this->showPage('daftar-pejabat'); }
 
+    // PERBAIKAN: Profil Komisioner (Hanya ambil dari Kelola Komisioner)
     public function profilKomisioner()
     {
-        $page = Page::where('slug', 'profil-komisioner')->first();
+        // Kita tidak lagi mengambil 'Page', langsung ambil data orangnya saja
         $commissioners = Commissioner::orderBy('order', 'asc')->get();
-        return view('frontend.commissioner_list', ['commissioners' => $commissioners, 'page' => $page, 'page_title' => $page ? $page->title : 'Profil Komisioner']);
+
+        return view('frontend.commissioner_list', [
+            'commissioners' => $commissioners,
+            'page_title' => 'Profil Komisioner', // Judul langsung di sini
+        ]);
     }
 
     public function strukturKomisioner()
     {
+        // Struktur Komisioner tetap mengambil dari Page (karena biasanya berisi gambar bagan)
         return $this->showPage('struktur-komisioner');
     }
 
     // === AGENDA ===
     public function agendaKomisioner()
     {
-        $agendas = Agenda::where('category', 'Agenda Komisioner')->orderBy('start_time', 'desc')->get();
-        return view('frontend.agenda_list', ['agendas' => $agendas, 'page_title' => 'Agenda Komisioner']);
+        $agendas = Agenda::where('category', 'Agenda Komisioner')->orderBy('start_time', 'asc')->get();
+        return view('frontend.agenda_komisioner', ['agendas' => $agendas, 'page_title' => 'Agenda Komisioner']);
     }
 
     public function jadwalSidang()
     {
-        $agendas = Agenda::where('category', 'Jadwal Sidang')->orderBy('start_time', 'desc')->get();
-        return view('frontend.agenda_list', ['agendas' => $agendas, 'page_title' => 'Jadwal Sidang']);
+        return $this->showPage('jadwal-sidang');
     }
 
-    // === LAPORAN & REGULASI & INFO PUBLIK (Tetap Sama) ===
+    // === LAPORAN & REGULASI & INFO PUBLIK ===
     public function laporanKinerja() { return $this->showDocumentList('laporan-kinerja', 'Laporan Perkembangan Kinerja'); }
     public function laporanEvaluasiKIP() { return $this->showDocumentList('laporan-evaluasi-kip', 'Laporan Hasil Evaluasi KIP'); }
     public function laporanKIP() { return $this->showDocumentList('laporan-kip', 'Laporan KIP'); }

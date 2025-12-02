@@ -11,34 +11,49 @@ class DocumentController extends Controller
     /**
      * Menampilkan daftar semua dokumen.
      */
-    public function index(Request $request) // <-- Tambahkan Request $request
+    public function index(Request $request)
     {
-        // 1. Mulai query (jangan langsung ->get())
         $query = Document::orderBy('created_at', 'desc');
 
-        // 2. Cek apakah ada pencarian?
+        // Filter Pencarian Global
         if ($request->has('search') && $request->search != null) {
             $keyword = $request->search;
-            // Filter berdasarkan Judul ATAU Kategori
             $query->where(function($q) use ($keyword) {
                 $q->where('title', 'LIKE', "%$keyword%")
                   ->orWhere('category', 'LIKE', "%$keyword%");
             });
         }
 
-        // 3. Eksekusi query
+        // FILTER DARI SIDEBAR (Type)
+        if ($request->has('type') && $request->type != null) {
+            $type = $request->type;
+
+            if ($type == 'laporan') {
+                $query->where('category', 'LIKE', '%laporan%');
+            } elseif ($type == 'regulasi') {
+                // Semua kategori yang masuk regulasi
+                $query->whereIn('category', [
+                    'undang-undang', 'peraturan-pemerintah', 'peraturan-daerah',
+                    'peraturan-presiden', 'peraturan-mahkamah-agung', 'peraturan-menteri',
+                    'pengaturan-komisi-informasi', 'surat-keputusan', 'surat-edaran', 'mou'
+                ]);
+            } elseif ($type == 'informasi-publik') {
+                $query->whereIn('category', [
+                    'putusan', 'informasi-berkala', 'informasi-setiap-saat',
+                    'informasi-serta-merta', 'dipa', 'form-permohonan-psi'
+                ]);
+            }
+        }
+
         $documents = $query->get();
 
         return view('admin.documents.index', compact('documents'));
     }
 
-    /**
-     * Menampilkan form untuk membuat dokumen baru.
-     */
-    public function create()
+    public function create(Request $request)
     {
-        // Cukup tampilkan view-nya
-        return view('admin.documents.create');
+        // Kirim parameter 'type' ke view create agar dropdown kategori bisa difilter otomatis
+        return view('admin.documents.create', ['type' => $request->type]);
     }
 
     /**
